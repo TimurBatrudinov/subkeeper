@@ -33,6 +33,7 @@ def ensure_dir_exists(token: str, remote_dir: str) -> None:
         timeout=30,
     )
     if response.status_code not in (201, 409):
+        logging.error("Ответ API: %s", response.text)
         response.raise_for_status()
 
 
@@ -60,6 +61,8 @@ if __name__ == "__main__":
     if not token:
         logging.error("Переменная окружения YANDEX_TOKEN не задана.")
         sys.exit(1)
+
+    logging.info("Токен загружен (длина: %d символов).", len(token))
 
     file_content = download_file(SOURCE_URL)
     ensure_dir_exists(token, REMOTE_DIR)
